@@ -37,11 +37,11 @@ namespace Chessington.GameEngine.Tests.Pieces
         {
             var board = new Board();
             var pawn = new Pawn(Player.White);
-            board.AddPiece(Square.At(6, 5), pawn);
+            board.AddPiece(Square.At(7, 5), pawn);
 
             var moves = pawn.GetAvailableMoves(board);
 
-            moves.Should().Contain(Square.At(4, 5));
+            moves.Should().Contain(Square.At(5, 5));
         }
 
         [Test]
@@ -61,13 +61,13 @@ namespace Chessington.GameEngine.Tests.Pieces
         {
             var board = new Board();
             var pawn = new Pawn(Player.White);
-            board.AddPiece(Square.At(6, 2), pawn);
+            board.AddPiece(Square.At(7, 2), pawn);
 
-            pawn.MoveTo(board, Square.At(5, 2));
+            pawn.MoveTo(board, Square.At(6, 2));
             var moves = pawn.GetAvailableMoves(board).ToList();
 
             moves.Should().HaveCount(1);
-            moves.Should().Contain(square => square.Equals(Square.At(4, 2)));
+            moves.Should().Contain(square => square.Equals(Square.At(5, 2)));
         }
 
         [Test]
@@ -82,8 +82,6 @@ namespace Chessington.GameEngine.Tests.Pieces
 
             moves.Should().HaveCount(1);
             moves.Should().Contain(square => square.Equals(Square.At(7, 2)));
-
-
         }
 
         [Test]
@@ -202,20 +200,6 @@ namespace Chessington.GameEngine.Tests.Pieces
 
             moves.Should().NotContain(Square.At(6, 2));
             moves.Should().NotContain(Square.At(6, 4));
-        }
-
-        [Test]
-        public void WhitePawns_EnPassant()
-        {
-            var board = new Board(Player.Black);
-            var blackPawn = new Pawn(Player.Black);
-            board.AddPiece(Square.At(1, 1), blackPawn);
-            var whitePawn = new Pawn(Player.White);
-            board.AddPiece(Square.At(3,2),whitePawn);
-            board.MovePiece(Square.At(1,1),Square.At(3,1));
-            var moves = whitePawn.GetAvailableMoves(board).ToList();
-            moves.Should().Contain(Square.At(2, 1));
-            //Assert.IsNull(board.GetPiece(Square.At(3, 1)), "Pawn not taken, en passe failed.");
         }
     }
 }
