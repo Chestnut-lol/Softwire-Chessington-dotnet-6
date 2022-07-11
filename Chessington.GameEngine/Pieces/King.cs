@@ -45,6 +45,7 @@ namespace Chessington.GameEngine.Pieces
             int lastRow = GetLastRow();
             if (CanBigCaste(ref lastRow, ref board))
             {
+                
                 AddSquare(ref squares, lastRow, 2, ref square, ref board);
             };
             if (CanSmallCastle(ref lastRow, ref board))
@@ -56,16 +57,20 @@ namespace Chessington.GameEngine.Pieces
 
         private bool CanSmallCastle(ref int lastRow, ref Board board)
         {
-            if (board.GetPiece(Square.At(lastRow, 7)).GetType() != typeof(Rook))
+            var piece = board.GetPiece(Square.At(lastRow, 0));
+            if (piece == null)
+            {
+                return false;} 
+            if (piece.GetType() != typeof(Rook))
+            {
+                return false;
+            }
+            
+            if (piece.Moved)
             {
                 return false;
             }
 
-            var rook = board.GetPiece(Square.At(lastRow, 0));
-            if (rook.Moved)
-            {
-                return false;
-            }
 
             for (int i = 6; i > 4; i--)
             {
@@ -80,13 +85,16 @@ namespace Chessington.GameEngine.Pieces
 
         private bool CanBigCaste(ref int lastRow, ref Board board)
         {
-            if (board.GetPiece(Square.At(lastRow, 0)).GetType() != typeof(Rook))
+            var piece = board.GetPiece(Square.At(lastRow, 0));
+            if (piece == null)
+            {
+                return false;} 
+            if (piece.GetType() != typeof(Rook))
             {
                 return false;
             }
-
-            var rook = board.GetPiece(Square.At(lastRow, 0));
-            if (rook.Moved)
+            
+            if (piece.Moved)
             {
                 return false;
             }
@@ -98,6 +106,7 @@ namespace Chessington.GameEngine.Pieces
                     return false;
                 }
             }
+            
 
             return true;
         }

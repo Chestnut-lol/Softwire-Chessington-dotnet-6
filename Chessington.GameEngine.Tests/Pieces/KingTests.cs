@@ -76,5 +76,21 @@ namespace Chessington.GameEngine.Tests.Pieces
             var moves = king.GetAvailableMoves(board);
             moves.Should().NotContain(Square.At(4, 5));
         }
+
+        [Test]
+        public void Kings_CanCastle()
+        {
+            var board = new Board();
+            var king = new King(Player.White);
+            board.AddPiece(Square.At(7,4),king);
+            var bigRook = new Rook(Player.White);
+            board.AddPiece(Square.At(7,0),bigRook);
+            var smallRook = new Rook(Player.White);
+            board.AddPiece(Square.At(7,7),smallRook);
+            var moves = king.GetAvailableMoves(board);
+            moves.Should().Contain(Square.At(7, 2),"Big Castle");
+            moves.Should().Contain(Square.At(7, 6),"Small Castle");
+            
+        }
     }
 }
