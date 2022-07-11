@@ -27,8 +27,9 @@ namespace Chessington.GameEngine.Pieces
                 {
                     continue;
                 }
-                if (board.GetPiece(new Square(square.Row, colNum))!=null)
+                if (board.GetPiece(new Square(rowNum, colNum))!=null)
                 {
+                    TakeOpponentPieces(ref squares, ref square, ref board, rowNum, colNum);
                     break;
                 }
                 AddSquare(ref squares, rowNum, colNum, ref square);
@@ -42,8 +43,9 @@ namespace Chessington.GameEngine.Pieces
                 {
                     continue;
                 }
-                if (board.GetPiece(new Square(square.Row, colNum))!=null)
+                if (board.GetPiece(new Square(rowNum, colNum))!=null)
                 {
+                    TakeOpponentPieces(ref squares, ref square, ref board, rowNum, colNum);
                     break;
                 }
                 AddSquare(ref squares, rowNum, colNum, ref square);
@@ -59,8 +61,9 @@ namespace Chessington.GameEngine.Pieces
                 {
                     continue;
                 }
-                if (board.GetPiece(new Square(rowNum, square.Col))!=null)
+                if (board.GetPiece(new Square(rowNum, colNum))!=null)
                 {
+                    TakeOpponentPieces(ref squares, ref square, ref board, rowNum, colNum);
                     break;
                 }
                 AddSquare(ref squares, rowNum, colNum, ref square);
@@ -69,8 +72,9 @@ namespace Chessington.GameEngine.Pieces
             rowNum = square.Row - 1;
             while (rowNum >= 0)
             {
-                if (board.GetPiece(new Square(rowNum, square.Col))!=null)
+                if (board.GetPiece(new Square(rowNum, colNum))!=null)
                 {
+                    TakeOpponentPieces(ref squares, ref square, ref board, rowNum, colNum);
                     break;
                 }
                 AddSquare(ref squares, rowNum, colNum, ref square);
@@ -90,10 +94,12 @@ namespace Chessington.GameEngine.Pieces
                 {
                     if (board.GetPiece(new Square(rowUp, colNum)) != null)
                     {
+                        TakeOpponentPieces(ref squares, ref square, ref board, rowUp, colNum);
                         rowUp = 8; // No more squares will be added along this line
                     }
                     if (board.GetPiece(new Square(rowDown, colNum)) != null)
                     {
+                        TakeOpponentPieces(ref squares, ref square, ref board, rowDown, colNum);
                         rowDown = -1; // No more squares will be added along this line
                     }
                 }
@@ -113,14 +119,16 @@ namespace Chessington.GameEngine.Pieces
                 {
                     if (board.GetPiece(new Square(rowUp, colNum)) != null)
                     {
+                        TakeOpponentPieces(ref squares, ref square, ref board, rowUp, colNum);
                         rowUp = 8; // No more squares will be added along this line
                     }
                     if (board.GetPiece(new Square(rowDown, colNum)) != null)
                     {
+                        TakeOpponentPieces(ref squares, ref square, ref board, rowDown, colNum);
                         rowDown = -1; // No more squares will be added along this line
                     }
                 }
-                AddSquare(ref squares,  rowUp,  colNum, ref square);
+                AddSquare(ref squares, rowUp,  colNum, ref square);
                 AddSquare(ref squares,  rowDown,  colNum, ref square);
                 colNum += 1;
             }
@@ -128,6 +136,15 @@ namespace Chessington.GameEngine.Pieces
         private bool CheckValidSquare(int rowNum, int colNum)
         {
             return (rowNum >= 0 && rowNum < 8 && colNum >= 0 && colNum < 8);
+        }
+        private void TakeOpponentPieces(ref List<Square> squares, ref Square square, ref Board board, int rowNum,
+            int colNum)
+        {
+            var piece = board.GetPiece(new Square(rowNum, colNum));
+            if (piece.Player != this.Player)
+            {
+                AddSquare(ref squares, rowNum, colNum, ref square);
+            }
         }
         private void AddSquare(ref List<Square> squares, int rowNum, int colNum, ref Square currentSquare)
             {

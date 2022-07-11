@@ -23,15 +23,17 @@ namespace Chessington.GameEngine.Pieces
                 {
                     if (board.GetPiece(new Square(rowUp, colNum)) != null)
                     {
+                        TakeOpponentPieces(ref squares, ref square, ref board, rowUp, colNum);
                         rowUp = 8; // No more squares will be added along this line
                     }
                     if (board.GetPiece(new Square(rowDown, colNum)) != null)
                     {
+                        TakeOpponentPieces(ref squares, ref square, ref board, rowDown, colNum);
                         rowDown = -1; // No more squares will be added along this line
                     }
                 }
-                AddSquare(ref squares, ref rowUp, ref colNum, ref square);
-                AddSquare(ref squares, ref rowDown, ref colNum, ref square);
+                AddSquare(ref squares,  rowUp,  colNum, ref square);
+                AddSquare(ref squares,  rowDown,  colNum, ref square);
                 colNum -= 1;
             }
 
@@ -46,22 +48,32 @@ namespace Chessington.GameEngine.Pieces
                 {
                     if (board.GetPiece(new Square(rowUp, colNum)) != null)
                     {
+                        TakeOpponentPieces(ref squares, ref square, ref board, rowUp, colNum);
                         rowUp = 8; // No more squares will be added along this line
                     }
                     if (board.GetPiece(new Square(rowDown, colNum)) != null)
                     {
+                        TakeOpponentPieces(ref squares, ref square, ref board, rowDown, colNum);
                         rowDown = -1; // No more squares will be added along this line
                     }
                 }
-                AddSquare(ref squares, ref rowUp, ref colNum, ref square);
-                AddSquare(ref squares, ref rowDown, ref colNum, ref square);
+                AddSquare(ref squares, rowUp,  colNum, ref square);
+                AddSquare(ref squares,  rowDown,  colNum, ref square);
                 colNum += 1;
             }
 
             return squares;
         }
-
-        private void AddSquare(ref List<Square> squares, ref int rowNum, ref int colNum, ref Square currentSquare)
+        private void TakeOpponentPieces(ref List<Square> squares, ref Square square, ref Board board, int rowNum,
+            int colNum)
+        {
+            var piece = board.GetPiece(new Square(rowNum, colNum));
+            if (piece.Player != this.Player)
+            {
+                AddSquare(ref squares, rowNum, colNum, ref square);
+            }
+        }
+        private void AddSquare(ref List<Square> squares, int rowNum, int colNum, ref Square currentSquare)
         {
             if (rowNum == currentSquare.Row && colNum == currentSquare.Col)
             {
