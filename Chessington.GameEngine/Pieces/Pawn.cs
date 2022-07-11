@@ -88,7 +88,6 @@ namespace Chessington.GameEngine.Pieces
             rowNum = GetOneRowUp(rowNum);
             
             AddSquare(ref squares, rowNum,colNum,ref square,ref board);
-            board.DeletePieceAtSquare(lastMove.ToSquare.Row, lastMove.ToSquare.Col);
         }
         private void TakeOpponentPiece(ref Board board, ref Square square, ref List<Square> squares)
         {

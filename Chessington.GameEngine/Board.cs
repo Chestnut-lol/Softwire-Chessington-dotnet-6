@@ -71,19 +71,7 @@ namespace Chessington.GameEngine
         {
             return (rowNum >= 0 && rowNum < 8 && colNum >= 0 && colNum < 8);
         }
-        public void DeletePieceAtSquare(int rowNum, int colNum)
-        {
-            if (!CheckValidSquare(rowNum, colNum))
-            {
-                throw new Exception("Row number and/or Col number not on board!");
-            }
-
-            if (this.GetPiece(Square.At(rowNum, colNum)) == null)
-            {
-                throw new Exception("Piece does not exist, nothing to be deleted!");
-            }
-            OnPieceCaptured(_board[rowNum, colNum]);
-        }
+        
         private void SetLastMove(Piece piece, Square from, Square to)
         {
             Move move = new Move(piece, from, to);
