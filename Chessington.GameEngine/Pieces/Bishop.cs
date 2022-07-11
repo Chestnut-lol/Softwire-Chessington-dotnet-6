@@ -26,6 +26,9 @@ namespace Chessington.GameEngine.Pieces
                         TakeOpponentPieces(ref squares, ref square, ref board, rowUp, colNum);
                         rowUp = 8; // No more squares will be added along this line
                     }
+                }
+                if (CheckValidSquare(rowDown, colNum))
+                {
                     if (board.GetPiece(new Square(rowDown, colNum)) != null)
                     {
                         TakeOpponentPieces(ref squares, ref square, ref board, rowDown, colNum);
@@ -51,6 +54,9 @@ namespace Chessington.GameEngine.Pieces
                         TakeOpponentPieces(ref squares, ref square, ref board, rowUp, colNum);
                         rowUp = 8; // No more squares will be added along this line
                     }
+                }
+                if (CheckValidSquare(rowDown, colNum))
+                {
                     if (board.GetPiece(new Square(rowDown, colNum)) != null)
                     {
                         TakeOpponentPieces(ref squares, ref square, ref board, rowDown, colNum);

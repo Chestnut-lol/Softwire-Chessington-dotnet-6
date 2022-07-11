@@ -71,7 +71,7 @@ namespace Chessington.GameEngine.Pieces
             }
             else
             {
-                return board.FindPiece(this).Row == 7;
+                return board.FindPiece(this).Row == 6;
             }
         }
         private bool CheckValidSquare(int rowNum, int colNum)

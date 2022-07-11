@@ -83,7 +83,7 @@ namespace Chessington.GameEngine.Pieces
         }
         private void MoveLikeBishop(ref Square square, ref List<Square> squares, ref Board board)
         {
-            int colNum = square.Col - 1;
+                        int colNum = square.Col - 1;
             int rowUp = square.Row;
             int rowDown = square.Row;
             while (colNum >= 0)
@@ -97,6 +97,9 @@ namespace Chessington.GameEngine.Pieces
                         TakeOpponentPieces(ref squares, ref square, ref board, rowUp, colNum);
                         rowUp = 8; // No more squares will be added along this line
                     }
+                }
+                if (CheckValidSquare(rowDown, colNum))
+                {
                     if (board.GetPiece(new Square(rowDown, colNum)) != null)
                     {
                         TakeOpponentPieces(ref squares, ref square, ref board, rowDown, colNum);
@@ -122,6 +125,9 @@ namespace Chessington.GameEngine.Pieces
                         TakeOpponentPieces(ref squares, ref square, ref board, rowUp, colNum);
                         rowUp = 8; // No more squares will be added along this line
                     }
+                }
+                if (CheckValidSquare(rowDown, colNum))
+                {
                     if (board.GetPiece(new Square(rowDown, colNum)) != null)
                     {
                         TakeOpponentPieces(ref squares, ref square, ref board, rowDown, colNum);
