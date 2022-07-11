@@ -46,6 +46,11 @@ namespace Chessington.GameEngine
         public void MovePiece(Square from, Square to)
         {
             var movingPiece = _board[from.Row, from.Col];
+            //Handle special cases
+            if (movingPiece.GetType() == typeof(Pawn) && (from.Col!=to.Col))
+            {
+                EnPasse(from, to);
+            }
             if (movingPiece == null) { return; }
 
             if (movingPiece.Player != CurrentPlayer)
@@ -67,9 +72,12 @@ namespace Chessington.GameEngine
             OnCurrentPlayerChanged(CurrentPlayer);
             SetLastMove(movingPiece, from, to);
         }
-        private bool CheckValidSquare(int rowNum, int colNum)
+
+        private void EnPasse(Square from, Square to)
         {
-            return (rowNum >= 0 && rowNum < 8 && colNum >= 0 && colNum < 8);
+            var deletingPiece = _board[from.Row, to.Col];
+            OnPieceCaptured(_board[from.Row, to.Col]);
+            _board[from.Row, to.Col] = null;
         }
         
         private void SetLastMove(Piece piece, Square from, Square to)
