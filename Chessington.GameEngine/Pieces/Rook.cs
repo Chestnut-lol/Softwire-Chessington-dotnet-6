@@ -12,29 +12,83 @@ namespace Chessington.GameEngine.Pieces
         {
             Square square = board.FindPiece(this);
             List<Square> squares = new List<Square>();
-            for (int i = 0; i < 8; i++)
+            
+            int rowNum = square.Row;
+            int colNum = square.Col + 1;
+            while (colNum < 8)
             {
-                if (i == square.Col)
+                if (!CheckValidSquare(rowNum, colNum))
                 {
-                    ;
+                    continue;
                 }
-                else
+                if (board.GetPiece(new Square(square.Row, colNum))!=null)
                 {
-                    squares.Add(new Square(square.Row, i));
+                    break;
                 }
+                AddSquare(ref squares, rowNum, colNum, ref square);
+                colNum += 1;
             }
-            for (int i = 0; i < 8; i++)
+
+            colNum = square.Col - 1;
+            while (colNum >= 0)
             {
-                if (i == square.Row)
+                if (!CheckValidSquare(rowNum, colNum))
                 {
-                    ;
+                    continue;
                 }
-                else
+                if (board.GetPiece(new Square(square.Row, colNum))!=null)
                 {
-                    squares.Add(new Square(i, square.Col));
+                    break;
                 }
+                AddSquare(ref squares, rowNum, colNum, ref square);
+                colNum -= 1;
             }
+            
+            
+            colNum = square.Col;
+            rowNum = square.Row + 1;
+            while (rowNum < 8)
+            {
+                if (!CheckValidSquare(rowNum, colNum))
+                {
+                    continue;
+                }
+                if (board.GetPiece(new Square(rowNum, square.Col))!=null)
+                {
+                    break;
+                }
+                AddSquare(ref squares, rowNum, colNum, ref square);
+                rowNum += 1;
+            }
+            rowNum = square.Row - 1;
+            while (rowNum >= 0)
+            {
+                if (board.GetPiece(new Square(rowNum, square.Col))!=null)
+                {
+                    break;
+                }
+                AddSquare(ref squares, rowNum, colNum, ref square);
+                rowNum -= 1;
+            }
+            
             return squares;
+        }
+
+        private bool CheckValidSquare(int rowNum, int colNum)
+        {
+            return (rowNum >= 0 && rowNum < 8 && colNum >= 0 && colNum < 8);
+        }
+        private void AddSquare(ref List<Square> squares, int rowNum, int colNum, ref Square currentSquare)
+        {
+            if (rowNum == currentSquare.Row && colNum == currentSquare.Col)
+            {
+                return;
+            }
+
+            if (CheckValidSquare(rowNum, colNum))
+            {
+                squares.Add(new Square(rowNum, colNum));
+            }
         }
     }
 }
