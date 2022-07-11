@@ -28,6 +28,7 @@ namespace Chessington.GameEngine.Tests.Pieces
             expectedMoves.RemoveAll(s => s == Square.At(4, 4));
 
             moves.Should().Contain(expectedMoves);
+            
         }
     }
 }
