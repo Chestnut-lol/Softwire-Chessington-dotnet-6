@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace Chessington.GameEngine.Pieces
 {
@@ -30,8 +31,89 @@ namespace Chessington.GameEngine.Pieces
             }
             AddSquare(ref squares, square.Row + 1, square.Col, ref square, ref board);
             AddSquare(ref squares, square.Row - 1, square.Col, ref square, ref board);
+            TryCastle(ref squares, ref board, ref square);
             return squares;
         }
+
+        private void TryCastle(ref List<Square> squares, ref Board board, ref Square square)
+        {
+            if (this.Moved)
+            {
+                return;
+            }
+
+            int lastRow = GetLastRow();
+            if (CanBigCaste(ref lastRow, ref board))
+            {
+                AddSquare(ref squares, lastRow, 2, ref square, ref board);
+            };
+            if (CanSmallCastle(ref lastRow, ref board))
+            {
+                AddSquare(ref squares, lastRow, 6, ref square, ref board);
+
+            }
+        }
+
+        private bool CanSmallCastle(ref int lastRow, ref Board board)
+        {
+            if (board.GetPiece(Square.At(lastRow, 7)).GetType() != typeof(Rook))
+            {
+                return false;
+            }
+
+            var rook = board.GetPiece(Square.At(lastRow, 0));
+            if (rook.Moved)
+            {
+                return false;
+            }
+
+            for (int i = 6; i > 4; i--)
+            {
+                if (board.GetPiece(Square.At(lastRow, i)) != null)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private bool CanBigCaste(ref int lastRow, ref Board board)
+        {
+            if (board.GetPiece(Square.At(lastRow, 0)).GetType() != typeof(Rook))
+            {
+                return false;
+            }
+
+            var rook = board.GetPiece(Square.At(lastRow, 0));
+            if (rook.Moved)
+            {
+                return false;
+            }
+
+            for (int i = 1; i < 4; i++)
+            {
+                if (board.GetPiece(Square.At(lastRow, i)) != null)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private int GetLastRow()
+        {
+            if (this.Player == Player.White)
+            {
+                return 7;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
         private bool CheckValidSquare(int rowNum, int colNum)
         {
             return (rowNum >= 0 && rowNum < 8 && colNum >= 0 && colNum < 8);
