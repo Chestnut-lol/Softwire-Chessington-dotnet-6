@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Media.Animation;
 
 namespace Chessington.GameEngine.Pieces
 {
@@ -21,8 +22,13 @@ namespace Chessington.GameEngine.Pieces
                 {
                     continue;
                 }
-                if (board.GetPiece(new Square(square.Row, colNum))!=null)
+                if (board.GetPiece(new Square(rowNum, colNum))!=null)
                 {
+                    var piece = board.GetPiece(new Square(rowNum, colNum));
+                    if (piece.Player != this.Player)
+                    {
+                        AddSquare(ref squares, rowNum, colNum, ref square);
+                    }
                     break;
                 }
                 AddSquare(ref squares, rowNum, colNum, ref square);
@@ -36,8 +42,13 @@ namespace Chessington.GameEngine.Pieces
                 {
                     continue;
                 }
-                if (board.GetPiece(new Square(square.Row, colNum))!=null)
+                if (board.GetPiece(new Square(rowNum, colNum))!=null)
                 {
+                    var piece = board.GetPiece(new Square(rowNum, colNum));
+                    if (piece.Player != this.Player)
+                    {
+                        AddSquare(ref squares, rowNum, colNum, ref square);
+                    }
                     break;
                 }
                 AddSquare(ref squares, rowNum, colNum, ref square);
@@ -53,8 +64,13 @@ namespace Chessington.GameEngine.Pieces
                 {
                     continue;
                 }
-                if (board.GetPiece(new Square(rowNum, square.Col))!=null)
+                if (board.GetPiece(new Square(rowNum, colNum))!=null)
                 {
+                    var piece = board.GetPiece(new Square(rowNum, colNum));
+                    if (piece.Player != this.Player)
+                    {
+                        AddSquare(ref squares, rowNum, colNum, ref square);
+                    }
                     break;
                 }
                 AddSquare(ref squares, rowNum, colNum, ref square);
@@ -63,8 +79,13 @@ namespace Chessington.GameEngine.Pieces
             rowNum = square.Row - 1;
             while (rowNum >= 0)
             {
-                if (board.GetPiece(new Square(rowNum, square.Col))!=null)
+                if (board.GetPiece(new Square(rowNum, colNum))!=null)
                 {
+                    var piece = board.GetPiece(new Square(rowNum, colNum));
+                    if (piece.Player != this.Player)
+                    {
+                        AddSquare(ref squares, rowNum, colNum, ref square);
+                    }
                     break;
                 }
                 AddSquare(ref squares, rowNum, colNum, ref square);
