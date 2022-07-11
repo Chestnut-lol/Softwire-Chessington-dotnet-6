@@ -15,7 +15,7 @@ namespace Chessington.GameEngine.Pieces
             List<Square> squares = new List<Square>();
             int rowNum = GetOneRowUp(square.Row);
             int colNum = square.Col;
-            if (board.GetPiece(new Square(rowNum, colNum)) != null)
+            if (CheckValidSquare(rowNum, colNum) && board.GetPiece(new Square(rowNum, colNum)) != null)
             {
                 return squares;
             }
@@ -51,6 +51,10 @@ namespace Chessington.GameEngine.Pieces
                 return board.FindPiece(this).Row == 7;
             }
         }
+        private bool CheckValidSquare(int rowNum, int colNum)
+        {
+            return (rowNum >= 0 && rowNum < 8 && colNum >= 0 && colNum < 8);
+        }
         private void AddSquare(ref List<Square> squares, int rowNum, int colNum, ref Square currentSquare, ref Board board)
         {
             if (rowNum == currentSquare.Row && colNum == currentSquare.Col)
@@ -58,7 +62,7 @@ namespace Chessington.GameEngine.Pieces
                 return;
             }
 
-            if (board.GetPiece(new Square(rowNum, colNum)) != null)
+            if (CheckValidSquare(rowNum, colNum) && board.GetPiece(new Square(rowNum, colNum)) != null)
             {
                 return;
             }
