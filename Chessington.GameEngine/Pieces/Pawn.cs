@@ -15,12 +15,13 @@ namespace Chessington.GameEngine.Pieces
             List<Square> squares = new List<Square>();
             int rowNum = GetOneRowUp(square.Row);
             int colNum = square.Col;
+            TakeOpponentPiece(ref board, ref square, ref squares);
             if (CheckValidSquare(rowNum, colNum) && board.GetPiece(new Square(rowNum, colNum)) != null)
             {
                 return squares;
             }
             AddSquare(ref squares, rowNum, colNum, ref square, ref board);
-            if (HasMoved(board))
+            if (HasNotMoved(board))
             {
                 AddSquare(ref squares, GetOneRowUp(rowNum), square.Col, ref square, ref board);
             }
@@ -28,6 +29,28 @@ namespace Chessington.GameEngine.Pieces
             return squares;
         }
 
+        private void TakeOpponentPiece(ref Board board, ref Square square, ref List<Square> squares)
+        {
+            int rowNum = GetOneRowUp(square.Row);
+            int colNum = square.Col + 1;
+            if (CheckValidSquare(rowNum, colNum))
+            {
+                var piece = board.GetPiece(new Square(rowNum, colNum));
+                if (piece != null && piece.Player != this.Player)
+                {
+                    AddSquare(ref squares, rowNum, colNum, ref square, ref board);
+                }
+            }
+            colNum = square.Col - 1;
+            if (CheckValidSquare(rowNum, colNum))
+            {
+                var piece = board.GetPiece(new Square(rowNum, colNum));
+                if (piece != null && piece.Player != this.Player)
+                {
+                    AddSquare(ref squares, rowNum, colNum, ref square, ref board);
+                }
+            }
+        }
         private int GetOneRowUp(int rowNum)
         {
             if (this.Player == Player.White)
@@ -40,7 +63,7 @@ namespace Chessington.GameEngine.Pieces
                 return rowNum + 1;
             }
         }
-        private bool HasMoved(Board board)
+        private bool HasNotMoved(Board board)
         {
             if (this.Player == Player.Black)
             {
@@ -62,12 +85,8 @@ namespace Chessington.GameEngine.Pieces
                 return;
             }
 
-            if (CheckValidSquare(rowNum, colNum) && board.GetPiece(new Square(rowNum, colNum)) != null)
-            {
-                return;
-            }
-
-            if (rowNum >= 0 && rowNum < 8 && colNum >= 0 && colNum < 8)
+            
+            if (CheckValidSquare(rowNum, colNum))
             {
                 squares.Add(new Square(rowNum, colNum));
             }
