@@ -82,6 +82,8 @@ namespace Chessington.GameEngine.Tests.Pieces
 
             moves.Should().HaveCount(1);
             moves.Should().Contain(square => square.Equals(Square.At(7, 2)));
+
+
         }
     }
 }

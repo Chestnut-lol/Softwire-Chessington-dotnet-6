@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Controls.Ribbon;
 
 namespace Chessington.GameEngine.Pieces
 {
@@ -11,18 +12,39 @@ namespace Chessington.GameEngine.Pieces
         public override IEnumerable<Square> GetAvailableMoves(Board board)
         {
             var square = board.FindPiece(this);
+            List<Square> squares = new List<Square>();
+            int rowNum = GetOneRowUp(square.Row);
+            squares.Add(new Square(rowNum,square.Col) );
+            if (HasMoved(board))
+            {
+                squares.Add(new Square(GetOneRowUp(rowNum),square.Col));
+            }
 
-            int rowNum;
+            return squares;
+        }
+
+        private int GetOneRowUp(int rowNum)
+        {
             if (this.Player == Player.White)
             {
-                rowNum = square.Row - 1;
+                return rowNum - 1;
+                
             }
             else
             {
-                rowNum = square.Row + 1;
+                return rowNum + 1;
             }
-            List<Square> squares = new List<Square>(){ new Square(rowNum,0)  };
-            return squares;
+        }
+        private bool HasMoved(Board board)
+        {
+            if (this.Player == Player.Black)
+            {
+                return board.FindPiece(this).Row == 1;
+            }
+            else
+            {
+                return board.FindPiece(this).Row == 7;
+            }
         }
     }
 }
