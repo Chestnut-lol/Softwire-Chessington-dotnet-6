@@ -46,12 +46,19 @@ namespace Chessington.GameEngine
         public void MovePiece(Square from, Square to)
         {
             var movingPiece = _board[from.Row, from.Col];
+            if (movingPiece == null) { return; }
             //Handle special cases
             if (movingPiece.GetType() == typeof(Pawn) && (from.Col!=to.Col))
             {
                 EnPasse(from, to);
             }
-            if (movingPiece == null) { return; }
+
+            if (movingPiece.GetType() == typeof(King) && (Math.Abs(from.Col - to.Col) == 2))
+            {
+                ;
+                Castling(from, to);
+            }
+            
 
             if (movingPiece.Player != CurrentPlayer)
             {
@@ -71,6 +78,30 @@ namespace Chessington.GameEngine
             CurrentPlayer = movingPiece.Player == Player.White ? Player.Black : Player.White;
             OnCurrentPlayerChanged(CurrentPlayer);
             SetLastMove(movingPiece, from, to);
+        }
+
+        private void Castling(Square from, Square to)
+        {
+            int rookFromCol;
+            int rookToCol;
+            if (to.Col == 6) // small castle
+            {
+                rookFromCol = 7;
+                rookToCol = 5;
+            }
+            else if (to.Col == 2) // big castle
+            {
+                rookFromCol = 0;
+                rookToCol = 3;
+            }
+            else
+            {
+                throw new Exception("Bug in Board.Castling!");
+            }
+
+            _board[from.Row, rookFromCol].Moved = true; // Set rook as moved.
+            _board[to.Row, rookToCol] = _board[from.Row, rookFromCol];
+            _board[from.Row, rookFromCol] = null;
         }
 
         private void EnPasse(Square from, Square to)

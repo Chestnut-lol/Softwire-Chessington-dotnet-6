@@ -10,7 +10,7 @@ namespace Chessington.GameEngine.Pieces
             Moved = false;
         }
 
-        public bool Moved { get; private set; }
+        public bool Moved { get; set; }
 
         public Player Player { get; private set; }
 
