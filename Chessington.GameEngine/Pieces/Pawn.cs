@@ -14,10 +14,15 @@ namespace Chessington.GameEngine.Pieces
             var square = board.FindPiece(this);
             List<Square> squares = new List<Square>();
             int rowNum = GetOneRowUp(square.Row);
-            squares.Add(new Square(rowNum,square.Col) );
+            int colNum = square.Col;
+            if (board.GetPiece(new Square(rowNum, colNum)) != null)
+            {
+                return squares;
+            }
+            AddSquare(ref squares, rowNum, colNum, ref square, ref board);
             if (HasMoved(board))
             {
-                squares.Add(new Square(GetOneRowUp(rowNum),square.Col));
+                AddSquare(ref squares, GetOneRowUp(rowNum), square.Col, ref square, ref board);
             }
 
             return squares;
@@ -44,6 +49,23 @@ namespace Chessington.GameEngine.Pieces
             else
             {
                 return board.FindPiece(this).Row == 7;
+            }
+        }
+        private void AddSquare(ref List<Square> squares, int rowNum, int colNum, ref Square currentSquare, ref Board board)
+        {
+            if (rowNum == currentSquare.Row && colNum == currentSquare.Col)
+            {
+                return;
+            }
+
+            if (board.GetPiece(new Square(rowNum, colNum)) != null)
+            {
+                return;
+            }
+
+            if (rowNum >= 0 && rowNum < 8 && colNum >= 0 && colNum < 8)
+            {
+                squares.Add(new Square(rowNum, colNum));
             }
         }
     }
