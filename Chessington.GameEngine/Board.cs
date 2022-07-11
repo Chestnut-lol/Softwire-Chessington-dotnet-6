@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows;
 using Chessington.GameEngine.Pieces;
 
 namespace Chessington.GameEngine
@@ -9,6 +10,8 @@ namespace Chessington.GameEngine
         private readonly Piece[,] _board;
         public Player CurrentPlayer { get; private set; }
         public IList<Piece> CapturedPieces { get; private set; } 
+        
+        public Move LastMove { get; set; }
 
         public Board()
             : this(Player.White) { }
@@ -62,6 +65,29 @@ namespace Chessington.GameEngine
 
             CurrentPlayer = movingPiece.Player == Player.White ? Player.Black : Player.White;
             OnCurrentPlayerChanged(CurrentPlayer);
+            SetLastMove(movingPiece, from, to);
+        }
+        private bool CheckValidSquare(int rowNum, int colNum)
+        {
+            return (rowNum >= 0 && rowNum < 8 && colNum >= 0 && colNum < 8);
+        }
+        public void DeletePieceAtSquare(int rowNum, int colNum)
+        {
+            if (!CheckValidSquare(rowNum, colNum))
+            {
+                throw new Exception("Row number and/or Col number not on board!");
+            }
+
+            if (this.GetPiece(Square.At(rowNum, colNum)) == null)
+            {
+                throw new Exception("Piece does not exist, nothing to be deleted!");
+            }
+            OnPieceCaptured(_board[rowNum, colNum]);
+        }
+        private void SetLastMove(Piece piece, Square from, Square to)
+        {
+            Move move = new Move(piece, from, to);
+            LastMove = move;
         }
         
         public delegate void PieceCapturedEventHandler(Piece piece);
