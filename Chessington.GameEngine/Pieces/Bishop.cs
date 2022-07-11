@@ -19,6 +19,17 @@ namespace Chessington.GameEngine.Pieces
             {
                 rowUp += 1;
                 rowDown -= 1;
+                if (CheckValidSquare(rowUp, colNum))
+                {
+                    if (board.GetPiece(new Square(rowUp, colNum)) != null)
+                    {
+                        rowUp = 8; // No more squares will be added along this line
+                    }
+                    if (board.GetPiece(new Square(rowDown, colNum)) != null)
+                    {
+                        rowDown = -1; // No more squares will be added along this line
+                    }
+                }
                 AddSquare(ref squares, ref rowUp, ref colNum, ref square);
                 AddSquare(ref squares, ref rowDown, ref colNum, ref square);
                 colNum -= 1;
@@ -31,6 +42,17 @@ namespace Chessington.GameEngine.Pieces
             {
                 rowUp += 1;
                 rowDown -= 1;
+                if (CheckValidSquare(rowUp, colNum))
+                {
+                    if (board.GetPiece(new Square(rowUp, colNum)) != null)
+                    {
+                        rowUp = 8; // No more squares will be added along this line
+                    }
+                    if (board.GetPiece(new Square(rowDown, colNum)) != null)
+                    {
+                        rowDown = -1; // No more squares will be added along this line
+                    }
+                }
                 AddSquare(ref squares, ref rowUp, ref colNum, ref square);
                 AddSquare(ref squares, ref rowDown, ref colNum, ref square);
                 colNum += 1;
@@ -49,6 +71,10 @@ namespace Chessington.GameEngine.Pieces
             {
                 squares.Add(new Square(rowNum, colNum));
             }
+        }
+        private bool CheckValidSquare(int rowNum, int colNum)
+        {
+            return (rowNum >= 0 && rowNum < 8 && colNum >= 0 && colNum < 8);
         }
     }
 }
