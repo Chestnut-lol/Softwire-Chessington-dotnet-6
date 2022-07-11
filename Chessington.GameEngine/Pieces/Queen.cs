@@ -12,6 +12,73 @@ namespace Chessington.GameEngine.Pieces
         {
             List<Square> squares = new List<Square>();
             Square square = board.FindPiece(this);
+            MoveLikeBishop(ref square, ref squares, ref board);
+            MoveLikeRook(ref square, ref squares, ref board);
+            return squares;
+        }
+
+        private void MoveLikeRook(ref Square square, ref List<Square> squares, ref Board board)
+        {
+            int rowNum = square.Row;
+            int colNum = square.Col + 1;
+            while (colNum < 8)
+            {
+                if (!CheckValidSquare(rowNum, colNum))
+                {
+                    continue;
+                }
+                if (board.GetPiece(new Square(square.Row, colNum))!=null)
+                {
+                    break;
+                }
+                AddSquare(ref squares, rowNum, colNum, ref square);
+                colNum += 1;
+            }
+
+            colNum = square.Col - 1;
+            while (colNum >= 0)
+            {
+                if (!CheckValidSquare(rowNum, colNum))
+                {
+                    continue;
+                }
+                if (board.GetPiece(new Square(square.Row, colNum))!=null)
+                {
+                    break;
+                }
+                AddSquare(ref squares, rowNum, colNum, ref square);
+                colNum -= 1;
+            }
+            
+            
+            colNum = square.Col;
+            rowNum = square.Row + 1;
+            while (rowNum < 8)
+            {
+                if (!CheckValidSquare(rowNum, colNum))
+                {
+                    continue;
+                }
+                if (board.GetPiece(new Square(rowNum, square.Col))!=null)
+                {
+                    break;
+                }
+                AddSquare(ref squares, rowNum, colNum, ref square);
+                rowNum += 1;
+            }
+            rowNum = square.Row - 1;
+            while (rowNum >= 0)
+            {
+                if (board.GetPiece(new Square(rowNum, square.Col))!=null)
+                {
+                    break;
+                }
+                AddSquare(ref squares, rowNum, colNum, ref square);
+                rowNum -= 1;
+            }
+        }
+        private void MoveLikeBishop(ref Square square, ref List<Square> squares, ref Board board)
+        {
             int colNum = square.Col - 1;
             int rowUp = square.Row;
             int rowDown = square.Row;
@@ -19,8 +86,19 @@ namespace Chessington.GameEngine.Pieces
             {
                 rowUp += 1;
                 rowDown -= 1;
-                AddSquare(ref squares, ref rowUp, ref colNum, ref square);
-                AddSquare(ref squares, ref rowDown, ref colNum, ref square);
+                if (CheckValidSquare(rowUp, colNum))
+                {
+                    if (board.GetPiece(new Square(rowUp, colNum)) != null)
+                    {
+                        rowUp = 8; // No more squares will be added along this line
+                    }
+                    if (board.GetPiece(new Square(rowDown, colNum)) != null)
+                    {
+                        rowDown = -1; // No more squares will be added along this line
+                    }
+                }
+                AddSquare(ref squares,  rowUp,  colNum, ref square);
+                AddSquare(ref squares,  rowDown,  colNum, ref square);
                 colNum -= 1;
             }
 
@@ -31,36 +109,27 @@ namespace Chessington.GameEngine.Pieces
             {
                 rowUp += 1;
                 rowDown -= 1;
-                AddSquare(ref squares, ref rowUp, ref colNum, ref square);
-                AddSquare(ref squares, ref rowDown, ref colNum, ref square);
+                if (CheckValidSquare(rowUp, colNum))
+                {
+                    if (board.GetPiece(new Square(rowUp, colNum)) != null)
+                    {
+                        rowUp = 8; // No more squares will be added along this line
+                    }
+                    if (board.GetPiece(new Square(rowDown, colNum)) != null)
+                    {
+                        rowDown = -1; // No more squares will be added along this line
+                    }
+                }
+                AddSquare(ref squares,  rowUp,  colNum, ref square);
+                AddSquare(ref squares,  rowDown,  colNum, ref square);
                 colNum += 1;
             }
-            for (int i = 0; i < 8; i++)
-            {
-                if (i == square.Col)
-                {
-                    ;
-                }
-                else
-                {
-                    squares.Add(new Square(square.Row, i));
-                }
-            }
-            for (int i = 0; i < 8; i++)
-            {
-                if (i == square.Row)
-                {
-                    ;
-                }
-                else
-                {
-                    squares.Add(new Square(i, square.Col));
-                }
-            }
-            return squares;
         }
-
-        private void AddSquare(ref List<Square> squares, ref int rowNum, ref int colNum, ref Square currentSquare)
+        private bool CheckValidSquare(int rowNum, int colNum)
+        {
+            return (rowNum >= 0 && rowNum < 8 && colNum >= 0 && colNum < 8);
+        }
+        private void AddSquare(ref List<Square> squares, int rowNum, int colNum, ref Square currentSquare)
             {
                 if (rowNum == currentSquare.Row && colNum == currentSquare.Col)
                 {
