@@ -90,26 +90,7 @@ namespace Chessington.GameEngine.Tests.Pieces
             var moves = king.GetAvailableMoves(board);
             moves.Should().Contain(Square.At(7, 2),"Big Castle");
             moves.Should().Contain(Square.At(7, 6),"Small Castle");
-        }
-        
-        [Test]
-        public void Kings_CannotCastle_IfPieceInTheWay()
-        {
-            // Add pieces onto board
-            var board = new Board();
-            var king = new King(Player.White);
-            board.AddPiece(Square.At(7,4),king);
-            var bigRook = new Rook(Player.White);
-            board.AddPiece(Square.At(7,0),bigRook);
-            var smallRook = new Rook(Player.White);
-            board.AddPiece(Square.At(7,7),smallRook);
-            var bigKnight = new Knight(Player.White);
-            board.AddPiece(Square.At(7,1), bigKnight);
-            var smallKnight = new Knight(Player.White);
-            board.AddPiece(Square.At(7,6), smallKnight);
-            var moves = king.GetAvailableMoves(board);
-            moves.Should().NotContain(Square.At(7, 2),"Big Castle Impossible");
-            moves.Should().NotContain(Square.At(7, 6),"Small Castle Impossible");
+            
         }
     }
 }
