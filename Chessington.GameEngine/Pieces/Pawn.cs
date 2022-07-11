@@ -22,7 +22,7 @@ namespace Chessington.GameEngine.Pieces
                 return squares;
             }
             Utilities.AddSquare(ref squares, rowNum, colNum, ref square);
-            if (HasNotMoved(board))
+            if (!this.Moved)
             {
                 rowNum = GetOneRowUp(rowNum);
                 if (Utilities.CheckValidSquare(rowNum, colNum) && board.GetPiece(new Square(rowNum, colNum)) == null)
@@ -121,17 +121,6 @@ namespace Chessington.GameEngine.Pieces
             else
             {
                 return rowNum + 1;
-            }
-        }
-        private bool HasNotMoved(Board board)
-        {
-            if (this.Player == Player.Black)
-            {
-                return board.FindPiece(this).Row == 1;
-            }
-            else
-            {
-                return board.FindPiece(this).Row == 6;
             }
         }
     }

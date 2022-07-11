@@ -7,7 +7,10 @@ namespace Chessington.GameEngine.Pieces
         protected Piece(Player player)
         {
             Player = player;
+            Moved = false;
         }
+
+        public bool Moved { get; private set; }
 
         public Player Player { get; private set; }
 
@@ -17,6 +20,7 @@ namespace Chessington.GameEngine.Pieces
         {
             var currentSquare = board.FindPiece(this);
             board.MovePiece(currentSquare, newSquare);
+            Moved = true;
         }
     }
 }
